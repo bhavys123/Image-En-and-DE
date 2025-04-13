@@ -1,41 +1,47 @@
 from PIL import Image
 import numpy as np
+import os
 
-def decrypt_image(encrypted_image_path, key):
+def encrypt_image(image_path, key):
     """
-    Decrypts an encrypted image using a given key.
+    Encrypts an image using a given key.
 
     Args:
-        encrypted_image_path (str): Path to the encrypted image file.
-        key (int): Decryption key.
+        image_path (str): Path to the image file.
+        key (int): Encryption key.
 
     Returns:
         None
     """
-    # Open the encrypted image file
-    encrypted_image = Image.open(encrypted_image_path)
+    # Check if the image file exists
+    if not os.path.exists(image_path):
+        print(f"Error: Image file '{image_path}' not found.")
+        return
 
-    # Convert the encrypted image to a numpy array
-    encrypted_array = np.array(encrypted_image)
+    # Open the image file
+    image = Image.open(image_path)
 
-    # Apply the decryption key to the encrypted array
-    decrypted_array = np.bitwise_xor(encrypted_array, np.uint8(key))
+    # Convert the image to a numpy array
+    image_array = np.array(image)
 
-    # Convert the decrypted array back to an image
-    decrypted_image = Image.fromarray(decrypted_array)
+    # Apply the encryption key to the image array
+    encrypted_array = np.bitwise_xor(image_array, np.uint8(key))
 
-    # Save the decrypted image
-    decrypted_image.save("decrypted_image.png")
+    # Convert the encrypted array back to an image
+    encrypted_image = Image.fromarray(encrypted_array)
+
+    # Save the encrypted image
+    encrypted_image.save("encrypted_image.png")
 
 def main():
     # Ask the user for input
-    encrypted_image_path = input("Enter the encrypted image path: ")
-    key = int(input("Enter the decryption key: "))
+    image_path = input("Enter the image path: ")
+    key = int(input("Enter the encryption key: "))
 
-    # Decrypt the image
-    decrypt_image(encrypted_image_path, key)
+    # Encrypt the image
+    encrypt_image(image_path, key)
 
-    print("Image decrypted successfully!")
+    print("Image encrypted successfully!")
 
 if __name__ == "__main__":
     main()
